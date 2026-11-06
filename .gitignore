@@ -1,0 +1,10 @@
+# Dependencies
+node_modules/
+
+# Environment Variables
+.env
+
+# 运行数据库可能含账号信息，不提交到代码仓库。
+server/db.sqlite
+server/db.sqlite-wal
+server/db.sqlite-shm
