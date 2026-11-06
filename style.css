@@ -1,0 +1,832 @@
+/* ==========================================================================
+   1. VARIABLES & THEME
+   ========================================================================== */
+:root {
+    --primary-bg: #1a1a1a;
+    --secondary-bg: #2d2d2d;
+    --primary-text: #ffffff;
+    --accent-color: #007acc;
+    --accent-hover: #005a9e;
+    --border-color: #444;
+    --success-color: #4CAF50;
+    --danger-color: #c0392b;
+    --danger-hover-color: #a93226;
+}
+
+/* ==========================================================================
+   2. BASE & GENERAL STYLES
+   ========================================================================== */
+body {
+    background-color: var(--primary-bg);
+    color: var(--primary-text);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    margin: 0;
+    padding: 20px;
+    line-height: 1.6;
+}
+
+h1 {
+    color: var(--accent-color);
+}
+
+label {
+    margin-bottom: 5px;
+    font-size: 0.9em;
+}
+
+input[type="number"] {
+    background-color: var(--secondary-bg);
+    color: var(--primary-text);
+    border: 1px solid var(--border-color);
+    padding: 8px;
+    border-radius: 4px;
+    text-align: center;
+    font-size: 1em;
+    -moz-appearance: textfield;
+    appearance: textfield;
+}
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+.visually-hidden {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+}
+
+
+/* ==========================================================================
+   3. LAYOUT
+   ========================================================================== */
+.container {
+    max-width: 1400px;
+    margin: 0 auto;
+}
+
+#workout-plan {
+    display: grid;
+    gap: 20px;
+    align-items: start;
+}
+
+.week-container {
+    break-inside: avoid;
+}
+
+/* ==========================================================================
+   4. HEADER & CONTROLS
+   ========================================================================== */
+header {
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
+.header-buttons,
+.view-controls {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-bottom: 1rem;
+    align-items: center;
+}
+
+.tm-inputs {
+    margin-bottom: 2rem;
+}
+
+.tm-inputs form {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    flex-wrap: wrap;
+}
+
+.tm-inputs .form-group {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.tm-inputs input[type="number"] {
+    width: 100px;
+}
+
+.tm-inputs select {
+    background-color: var(--secondary-bg);
+    color: var(--primary-text);
+    border: 1px solid var(--border-color);
+    padding: 8px;
+    border-radius: 4px;
+    font-size: 1em;
+    width: 160px; /* Adjust width for longer text */
+}
+
+.week-header {
+    font-size: 1.5em;
+    font-weight: bold;
+    text-align: center;
+    margin-top: 2rem;
+    margin-bottom: 1rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 2px solid var(--border-color);
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.week-header:first-of-type {
+    margin-top: 1rem;
+}
+
+.btn-delete-week {
+    background-color: var(--danger-color);
+    color: white;
+    border: none;
+    border-radius: 4px;
+    width: 28px;
+    height: 28px;
+    line-height: 28px;
+    text-align: center;
+    cursor: pointer;
+    font-size: 18px;
+    font-weight: bold;
+    margin-left: 15px;
+    transition: background-color 0.2s;
+}
+
+.btn-delete-week:hover {
+    background-color: var(--danger-hover-color);
+}
+
+/* ==========================================================================
+   5. WORKOUT PLAN & CARDS
+   ========================================================================== */
+.card {
+    background-color: var(--secondary-bg);
+    border-radius: 8px;
+    padding: 15px;
+    margin: 15px 0;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+    position: relative; /* For action buttons */
+}
+
+.card.day-completed {
+    border: 2px solid var(--success-color);
+}
+
+.card h3 {
+    margin-top: 0;
+    color: var(--accent-color);
+}
+
+/* ==========================================================================
+   6. CARD CONTENT (DISPLAY MODE)
+   ========================================================================== */
+.exercise-info {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 1rem;
+    margin: 1rem 0;
+}
+
+.exercise-info p {
+    margin: 0;
+}
+
+.exercise-icon {
+    margin-right: 8px;
+    display: inline-block;
+    vertical-align: middle;
+}
+
+.progress-container {
+    margin-top: 15px;
+}
+
+.progress-box {
+    display: inline-block;
+    width: 24px;
+    height: 24px;
+    border: 2px solid var(--border-color);
+    margin-right: 5px;
+    margin-bottom: 5px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.2s, border-color 0.2s;
+}
+
+.progress-box.completed {
+    background-color: var(--success-color);
+    border-color: var(--success-color);
+}
+
+/* 默认的垂直布局（兼容历史记录） */
+.group-progress-container,
+.group-progress-container-vertical {
+    margin-top: 15px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.group-row,
+.group-row-vertical {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: rgba(0,0,0,0.1);
+    padding: 8px;
+    border-radius: 4px;
+}
+
+/* 全局模式的紧凑水平布局 */
+.group-progress-container-compact {
+    margin-top: 15px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    align-items: stretch;
+}
+
+.group-row-compact {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: rgba(0,0,0,0.1);
+    padding: 8px 6px;
+    border-radius: 4px;
+    min-width: 70px;
+    flex: 1;
+    max-width: 90px;
+}
+
+.group-row-compact .group-header {
+    font-size: 0.75em;
+    color: #ccc;
+    margin-bottom: 4px;
+    text-align: center;
+}
+
+.group-row-compact .group-stats {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2px;
+    margin-bottom: 4px;
+}
+
+.group-row-compact .weight {
+    font-weight: bold;
+    font-size: 0.9em;
+}
+
+.group-row-compact .reps {
+    font-size: 0.8em;
+    color: #aaa;
+}
+
+.group-row-compact .group-completion {
+    display: flex;
+    justify-content: center;
+}
+
+.group-details {
+    font-size: 0.9em;
+    flex-grow: 1;
+}
+
+.group-completion {
+    display: flex;
+    gap: 5px;
+}
+
+/* ==========================================================================
+   7. CARD CONTENT (EDIT MODE)
+   ========================================================================== */
+.card.editable input,
+.card.editable select {
+    width: 100%;
+    padding: 8px;
+    background-color: var(--primary-bg);
+    color: var(--primary-text);
+    border: 1px solid var(--border-color);
+    border-radius: 4px;
+    box-sizing: border-box;
+}
+
+.form-row {
+    display: grid;
+    gap: 10px;
+    margin-bottom: 15px;
+    align-items: end;
+}
+
+.form-row-select {
+    grid-template-columns: repeat(2, 1fr);
+}
+
+.form-row-numeric {
+    grid-template-columns: 0.6fr 0.6fr 1fr 1fr;
+}
+
+.form-item {
+    display: flex;
+    flex-direction: column;
+}
+
+.form-item label {
+    font-size: 0.8em;
+    margin-bottom: 4px;
+    color: #ccc;
+    text-align: left;
+    white-space: nowrap;
+}
+
+.card-actions {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    z-index: 10;
+    display: flex;
+    gap: 5px;
+}
+
+.group-editor-container {
+    margin-top: 15px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.group-edit-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.group-edit-inputs {
+    display: grid;
+    grid-template-columns: 0.6fr 1fr 1fr;
+    gap: 10px;
+    flex-grow: 1;
+    align-items: end;
+}
+
+.group-edit-actions button {
+    background: var(--danger-color);
+    border: none;
+    color: white;
+    width: 28px;
+    height: 28px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
+    line-height: 28px;
+}
+.group-edit-actions button:hover {
+    background-color: var(--danger-hover-color);
+}
+
+/* ==========================================================================
+   8. BUTTONS
+   ========================================================================== */
+.btn {
+    background-color: var(--accent-color);
+    color: var(--primary-text);
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1em;
+    transition: background-color 0.2s, transform 0.1s;
+    text-align: center;
+}
+
+.btn:hover {
+    background-color: var(--accent-hover);
+}
+
+.btn:active {
+    transform: translateY(1px);
+}
+
+.btn:disabled {
+    background-color: var(--border-color);
+    cursor: not-allowed;
+    opacity: 0.6;
+}
+
+.btn-secondary {
+    background-color: var(--secondary-bg);
+    border: 1px solid var(--border-color);
+}
+
+.btn-secondary:hover {
+    background-color: #3e3e3e;
+}
+
+.btn-add-day, .btn-add-group, .btn-add-week {
+    width: 100%;
+    margin-top: 10px;
+    padding: 8px;
+    font-size: 0.9em;
+    background-color: transparent;
+    border: 2px dashed var(--border-color);
+    color: var(--primary-text);
+    opacity: 0.7;
+    transition: background-color 0.2s, border-color 0.2s, opacity 0.2s;
+}
+
+.btn-add-day:hover, .btn-add-group:hover, .btn-add-week:hover {
+    background-color: rgba(0, 122, 204, 0.1);
+    border-color: var(--accent-color);
+    opacity: 1;
+}
+
+.btn-add-week {
+    margin-top: 20px;
+    grid-column: 1 / -1;
+    font-weight: bold;
+}
+
+.btn-toggle-style, .btn-delete-day {
+    background-color: transparent;
+    color: var(--primary-text);
+    border: none;
+    border-radius: 4px;
+    width: 28px;
+    height: 28px;
+    line-height: 28px;
+    text-align: center;
+    cursor: pointer;
+    padding: 0;
+    transition: background-color 0.2s;
+}
+
+.btn-toggle-style {
+    font-size: 16px;
+}
+.btn-delete-day {
+    font-size: 20px;
+}
+
+.btn-toggle-style:hover {
+    background-color: var(--accent-hover);
+}
+
+.btn-delete-day:hover {
+    background-color: var(--danger-color);
+}
+
+
+/* ==========================================================================
+   9. MODAL
+   ========================================================================== */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.7);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s, visibility 0.3s;
+}
+
+.modal-overlay.visible {
+    opacity: 1;
+    visibility: visible;
+}
+
+.modal-content {
+    background-color: var(--secondary-bg);
+    padding: 2rem;
+    border-radius: 8px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
+    text-align: center;
+    max-width: 400px;
+    width: 90%;
+    transform: scale(0.9);
+    transition: transform 0.3s;
+}
+
+.modal-overlay.visible .modal-content {
+    transform: scale(1);
+}
+
+.modal-content h2 {
+    margin-top: 0;
+    color: var(--accent-color);
+}
+
+.modal-buttons {
+    margin-top: 1.5rem;
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+}
+
+/* ==========================================================================
+   10. HISTORY VIEW
+   ========================================================================== */
+#history-view h2 {
+    text-align: center;
+    color: var(--accent-color);
+}
+
+.archive-cycle {
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    padding: 1rem;
+    margin-bottom: 2rem;
+}
+
+.archive-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 1rem;
+    cursor: pointer;
+    user-select: none;
+}
+
+.archive-content.collapsed {
+    display: none;
+}
+
+.archived-plan {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 20px;
+    align-items: start;
+}
+
+.archive-tms {
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+}
+
+.tm-item {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.tm-item label {
+    font-size: 0.9em;
+    margin-bottom: 0;
+}
+
+.archive-header input[type="number"] {
+    width: 60px;
+    padding: 4px;
+    font-size: 0.9em;
+}
+
+.archive-header input[type="number"]:disabled {
+    background-color: transparent;
+    border-color: transparent;
+    color: var(--primary-text);
+    text-align: left;
+}
+
+.btn-edit-archive {
+    background-color: var(--accent-color);
+    border: none;
+    padding: 5px 10px;
+    border-radius: 4px;
+    font-size: 0.8em;
+    cursor: pointer;
+    color: var(--primary-text);
+    margin-left: auto;
+}
+.btn-edit-archive:hover {
+    background-color: var(--accent-hover);
+}
+
+.btn-delete-history {
+    background-color: var(--danger-color);
+    border: none;
+    padding: 5px 10px;
+    border-radius: 4px;
+    font-size: 0.8em;
+    cursor: pointer;
+    color: var(--primary-text);
+}
+.btn-delete-history:hover {
+    background-color: var(--danger-hover-color);
+}
+
+
+/* ==========================================================================
+   11. RESPONSIVE MEDIA QUERIES
+   ========================================================================== */
+body.single-week-view #workout-plan {
+    display: block;
+}
+body.single-week-view .week-container {
+    max-width: 500px;
+    margin: 0 auto;
+}
+body.single-week-view .card h3,
+body.single-week-view .progress-container {
+    text-align: center;
+}
+
+@media (min-width: 768px) {
+    body:not(.single-week-view) #workout-plan {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    
+    /* 平板设备上的紧凑布局优化 */
+    .group-row-compact {
+        min-width: 80px;
+        max-width: 100px;
+    }
+}
+
+@media (min-width: 1200px) {
+    body:not(.single-week-view) #workout-plan {
+        grid-template-columns: repeat(4, 1fr);
+    }
+    
+    /* 桌面设备上的紧凑布局优化 */
+    .group-row-compact {
+        min-width: 75px;
+        max-width: 95px;
+    }
+}
+
+/* 小屏幕设备的额外优化 */
+@media (max-width: 767px) {
+    .group-progress-container-compact {
+        gap: 6px;
+    }
+    
+    .group-row-compact {
+        min-width: 65px;
+        max-width: 80px;
+        padding: 6px 4px;
+    }
+    
+    .group-row-compact .group-header {
+        font-size: 0.7em;
+    }
+    
+    .group-row-compact .weight {
+        font-size: 0.85em;
+    }
+    
+    .group-row-compact .reps {
+        font-size: 0.75em;
+    }
+}
+
+/* ==========================================================================
+   12. AUTHENTICATION FORMS
+   ========================================================================== */
+#auth-container {
+    max-width: 400px;
+    margin: 2rem auto;
+    padding: 2rem;
+    background-color: var(--secondary-bg);
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+}
+
+.auth-form h2 {
+    text-align: center;
+    color: var(--accent-color);
+    margin-bottom: 1.5rem;
+}
+
+.auth-form .form-group {
+    margin-bottom: 1rem;
+}
+
+.auth-form label {
+    display: block;
+    margin-bottom: 0.5rem;
+}
+
+.auth-form input[type="text"],
+.auth-form input[type="password"] {
+    width: 100%;
+    padding: 0.75rem;
+    background-color: var(--primary-bg);
+    border: 1px solid var(--border-color);
+    color: var(--primary-text);
+    border-radius: 4px;
+    box-sizing: border-box;
+}
+
+.auth-form button {
+    width: 100%;
+    margin-top: 1rem;
+}
+
+.auth-form p {
+    text-align: center;
+    margin-top: 1rem;
+    font-size: 0.9em;
+}
+
+.auth-form a {
+    color: var(--accent-color);
+    text-decoration: none;
+}
+
+.auth-form a:hover {
+    text-decoration: underline;
+}
+
+/* ==========================================================================
+   AUTO INCREMENT STYLES
+   ========================================================================== */
+.auto-increment-section {
+    margin-top: 15px;
+    padding-top: 15px;
+    border-top: 1px solid var(--border-color);
+}
+
+.btn-toggle-increment {
+    background: var(--success-color);
+    color: white;
+    border: none;
+    padding: 8px 15px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 0.9rem;
+    width: 100%;
+    margin-bottom: 10px;
+    transition: background-color 0.2s;
+}
+
+.btn-toggle-increment:hover {
+    background: #45a049;
+}
+
+.increment-settings {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+    margin-top: 10px;
+}
+
+.increment-settings .form-item {
+    display: flex;
+    flex-direction: column;
+}
+
+.increment-settings .form-item label {
+    margin-bottom: 5px;
+    font-size: 0.8rem;
+    color: #ccc;
+}
+
+.increment-settings input[type="number"] {
+    background-color: var(--secondary-bg);
+    color: var(--primary-text);
+    border: 1px solid var(--border-color);
+    padding: 6px;
+    border-radius: 4px;
+    text-align: center;
+    font-size: 0.9rem;
+    width: 100%;
+}
+
+.btn-apply-increment {
+    background: var(--accent-color);
+    color: white;
+    border: none;
+    padding: 10px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 0.9rem;
+    grid-column: 1 / -1;
+    margin-top: 10px;
+    transition: background-color 0.2s;
+}
+
+.btn-apply-increment:hover {
+    background: var(--accent-hover);
+}
